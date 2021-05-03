@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { BrowserRouter, } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { Grid, Typography } from '@material-ui/core';
 import CardRecipe from './Components/CardRecipe/CardRecipe';
@@ -25,6 +25,7 @@ class App extends Component {
 
     return (
       <BrowserRouter>
+        
         <Header />
      
         <Grid container>
@@ -33,10 +34,13 @@ class App extends Component {
             // direction={ isGrid ? "row" : "column"} 
             container item sm={10}>
 
-              <CardRecipe />
-              <ListRecipe />
-              <AddRecipe />
-              <RecipeInfo />
+              <Switch>
+                <Route path="/cardrecipe" component={CardRecipe} />
+                <Route path="/listrecipe" component={ListRecipe} />
+                <Route path="/addrecipe" component={AddRecipe} />
+                <Route path="/recipeinfo" component={RecipeInfo} />
+                <Redirect from="/" to="/cardrecipe" />
+              </Switch>
 
           </Grid>
           <Grid item sm={1}></Grid>

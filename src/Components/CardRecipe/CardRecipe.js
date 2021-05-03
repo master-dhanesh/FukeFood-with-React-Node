@@ -40,6 +40,7 @@ function CardRecipe(props) {
       </CardContent>
       <CardActions disableSpacing>
       <Button
+        onClick={ () => props.history.push('/recipeinfo') }
         color="secondary"
         className={classes.button}
         startIcon={<More />}

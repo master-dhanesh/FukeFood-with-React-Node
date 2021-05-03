@@ -17,6 +17,7 @@ function ListRecipe(props) {
     return (
       <div>
         <Button
+        onClick={ () => props.history.push('/recipeinfo') }
         variant="contained"
         color="secondary"
         className={classes.button}
