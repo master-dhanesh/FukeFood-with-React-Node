@@ -41,6 +41,8 @@ function RecipeDetail(props) {
   const classes = useStyles();
 
 
+  console.log(props);
+
   const ActiveRecipe = {date: 'August 19, 2020 11:49:09 AM', dish: 'Mint Mojito', chef: 'nikhil', ingredientsArray:['mint', 'water', 'mojito paste', 'pudina leaf'], description: 'The Mint Mojito is so relaxing while people are stressed out, it provides positive vive while having.', image: 'https://data.thefeedfeed.com/recommended/post_3966940.jpeg'};
 
   const { date, dish, chef, description, ingredientsArray } = ActiveRecipe;
@@ -71,7 +73,7 @@ function RecipeDetail(props) {
 
     <div className={classes.buttons}>
     <Button
-        onClick={ () => props.history.push('/recipeinfo/edit')} 
+        onClick={ () => props.history.push(`${props.match.url}/edit`)} 
         variant="contained" color="primary">      
     Edit
     </Button>

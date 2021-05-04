@@ -41,9 +41,9 @@ function RecipeInfo(props) {
       <div className={classes.details}>
     
         <Switch>
-            <Route path={`${props.match.url}/info`} component={RecipeDetail} />
+            <Route exact path={`${props.match.url}/`} component={RecipeDetail} />
             <Route path={`${props.match.url}/edit`} component={AddRecipe} />
-            <Redirect from="/recipeinfo" to="/recipeinfo/info" />
+            <Redirect from={props.match.url} to={`${props.match.url}/info`} />
         </Switch>  
 
         </div>

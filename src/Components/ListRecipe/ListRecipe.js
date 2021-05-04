@@ -1,33 +1,34 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import loader from '../../assets/loader.gif'
+import SingleRecipe from './SingleRecipe/SingleRecipe';
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-      margin: theme.spacing(1),
-      padding: "10px 1.5rem"
-    },
-    imageSpace: {
-      marginRight: '1rem'
-    }
-  }));
 
 function ListRecipe(props) {
-    const classes = useStyles();
+  const [state, setstate] = useState(null);
+
+  useEffect(() => {
+      setstate({recipies:props.recipies});
+  }, [props.recipies])
+
+  let recipelist = <img src={loader} alt={loader} />;
+  if(state){
+    recipelist = state.recipies.map(r => 
+    <SingleRecipe key={r.date} recipe={r} /> 
+    )
+  }
+
     return (
-      <div>
-        <Button
-        onClick={ () => props.history.push('/recipeinfo') }
-        variant="contained"
-        color="secondary"
-        className={classes.button}
-        title={'The Mint Mojito is so relaxing while people are stressed out, it provides positive vive while having.'}
-        >
-        <img className={classes.imageSpace} height={50} src={'https://data.thefeedfeed.com/recommended/post_3966940.jpeg'} alt={'Mint Mojito'} />
-        {'Mint Mojito'}
-        </Button>
-        </div>
+      <>
+        {recipelist}
+      </>
     )
 }
 
-export default ListRecipe;
+const mapStateToProps = (state) => {
+  return {
+    recipies: [...state.RecipeReducer.recipies]
+  }
+}
+
+export default connect(mapStateToProps)(ListRecipe);
