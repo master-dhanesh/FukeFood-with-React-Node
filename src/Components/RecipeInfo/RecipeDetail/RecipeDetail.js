@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { connect } from 'react-redux';
+
 
 import { makeStyles } from '@material-ui/core/styles';
 import {Paper, CardContent, Typography, Button } from '@material-ui/core';
@@ -40,27 +43,34 @@ const useStyles = makeStyles((theme) => ({
 function RecipeDetail(props) {
   const classes = useStyles();
 
+  const [state, setstate] = useState({
+    date : '', 
+    dish: '', 
+    chef : '', 
+    description : '', 
+    ingredientsArray: []
+  });
 
-  console.log(props);
-
-  const ActiveRecipe = {date: 'August 19, 2020 11:49:09 AM', dish: 'Mint Mojito', chef: 'nikhil', ingredientsArray:['mint', 'water', 'mojito paste', 'pudina leaf'], description: 'The Mint Mojito is so relaxing while people are stressed out, it provides positive vive while having.', image: 'https://data.thefeedfeed.com/recommended/post_3966940.jpeg'};
-
-  const { date, dish, chef, description, ingredientsArray } = ActiveRecipe;
-  
   const random = () => Math.floor(Math.random()*3);
   const badgeColor = [ 'primary', 'secondary', 'default'];
   const badgeVarient = [ 'outlined', 'contained', 'text'];
-  const ingredientBadges = ingredientsArray.map( ingredient => (
+  const ingredientBadges = state.ingredientsArray.map( ingredient => (
     <Button key={ingredient} variant={badgeVarient[random()]} color={badgeColor[random()]}>{ingredient}</Button>
-  ) );
+    ) );
 
+    useEffect(() => {
+      if(props.activerecipe){
+        setstate({...props.activerecipe});
+      }
+  }, [props])
+    
     return (
         <CardContent className={classes.content}>
-      <Typography component="h3" variant="h3">{dish}</Typography>
-      <Typography variant="subtitle1" color="textSecondary">{chef}</Typography>
-      <Typography variant="subtitle2" color="textSecondary">{date}</Typography>
+      <Typography component="h3" variant="h3">{state.dish}</Typography>
+      <Typography variant="subtitle1" color="textSecondary">{state.chef}</Typography>
+      <Typography variant="subtitle2" color="textSecondary">{state.date}</Typography>
       <br />
-      <Typography variant="body1" color="textSecondary">{description}</Typography>
+      <Typography variant="body1" color="textSecondary">{state.description}</Typography>
 
       <Paper elevation={3} className={classes.ingredients}>
       <Typography component="h4" variant="h4"> 
@@ -86,4 +96,10 @@ function RecipeDetail(props) {
     )
 }
 
-export default RecipeDetail
+const mapStateToProps = state => {
+  return {
+    activerecipe: state.RecipeReducer.activerecipe
+  }
+}
+
+export default connect(mapStateToProps)(RecipeDetail);

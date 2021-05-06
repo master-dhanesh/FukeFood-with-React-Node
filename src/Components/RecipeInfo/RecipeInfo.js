@@ -1,6 +1,7 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import { GetActiveRecipie, RemoveActiveRecipie } from '../../Store/Actions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {Paper, CardMedia } from '@material-ui/core';
@@ -26,17 +27,31 @@ const useStyles = makeStyles((theme) => ({
 
 function RecipeInfo(props) {
   const classes = useStyles();
-
-  const ActiveRecipe = {date: 'August 19, 2020 11:49:09 AM', dish: 'Mint Mojito', chef: 'nikhil', ingredientsArray:['mint', 'water', 'mojito paste', 'pudina leaf'], description: 'The Mint Mojito is so relaxing while people are stressed out, it provides positive vive while having.', image: 'https://data.thefeedfeed.com/recommended/post_3966940.jpeg'};
-
-  const { dish, image } = ActiveRecipe;
+  const [state, setstate] = useState({
+      dish: '',
+      image: ''
+  });
   
+  useEffect(() => {
+      if(props.activerecipe === null){
+        props.GetActiveRecipie(props.match.params.id)
+      } else {
+        setstate({...props.activerecipe});
+      }
+      return () => {
+        if(props.activerecipe){
+          props.RemoveActiveRecipie();
+        }
+      }
+  }, [props]);
+
   return (
     <Paper elevation={3} className={classes.root}>
     <CardMedia
         className={classes.cover}
-        image={image}
-        title={dish}
+        src="takes time to load"
+        image={state.image}
+        title={state.dish}
       />
       <div className={classes.details}>
     
@@ -51,4 +66,15 @@ function RecipeInfo(props) {
   );
 }
 
-export default RecipeInfo;
+const mapStateToProps = state => {
+  return {
+    activerecipe: state.RecipeReducer.activerecipe
+  }
+}
+
+const mapDispatchToProps = ({
+  GetActiveRecipie,
+  RemoveActiveRecipie
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeInfo);

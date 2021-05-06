@@ -34,7 +34,7 @@ class App extends Component {
                 <Route path="/cardrecipe" component={CardRecipe} />
                 <Route path="/listrecipe" component={ListRecipe} />
                 <Route path="/addrecipe" component={AddRecipe} />
-                <Route path="/recipeinfo/:date" component={RecipeInfo} />
+                <Route path="/recipeinfo/:id" component={RecipeInfo} />
                 <Redirect from="/" to="/cardrecipe" />
               </Switch>
 

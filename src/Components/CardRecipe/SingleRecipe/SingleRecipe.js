@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SingleRecipe(props) {
   const classes = useStyles();
-  const { date, dish, chef, description, image} = props.recipe;
+  const { id, date, dish, chef, description, image} = props.recipe;
 
   return (
     <Card className={classes.root}>
@@ -57,7 +57,7 @@ function SingleRecipe(props) {
       </CardContent>
       <CardActions disableSpacing>
         <Button
-          onClick={() => props.history.push(`/recipeinfo/${date}`)}
+          onClick={() => props.history.push(`/recipeinfo/${id}`)}
           color="secondary"
           className={classes.button}
           startIcon={<More />}

@@ -18,12 +18,11 @@ const useStyles = makeStyles((theme) => ({
 
 function SingleRecipe(props) {
     const classes = useStyles();
-    const { dish, description, image, date} = props.recipe;
-      console.log(props);
+    const { id, dish, description, image} = props.recipe;
     return (
         <div>
         <Button
-        onClick={() => props.history.push(`/recipeinfo/${date}`)}
+        onClick={() => props.history.push(`/recipeinfo/${id}`)}
         variant="contained"
         color="secondary"
         className={classes.button}
