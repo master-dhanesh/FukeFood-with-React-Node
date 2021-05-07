@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
+import moment from 'moment';
+import { connect } from 'react-redux';
+
+import { CreateRecipe, ModifyRecipe } from '../../Store/Actions';
+
 import {TextField, Button, Grid} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,23 +29,59 @@ function AddRecipe(props) {
         chef: '',
         image: '',
         description: '',
-        date: '',
         ingredients: ''
     }
 
     const [state, setstate] = useState(initialState);
+
+
+    useEffect(() => {
+        if(props.activerecipe){
+            let recipedata = {...props.activerecipe};
+            let ingredients = recipedata.ingredientsArray.join(); 
+            delete recipedata.ingredientsArray;
+            setstate({...recipedata, ingredients});
+        }
+        return () => {
+            if(props.match.url === '/addrecipe'){
+                setstate({ dish: '', chef: '', image: '',
+                        description: '', ingredients: ''
+                    })
+            }
+        }
+    }, [props.activerecipe])
+
 
     const ChangeHandler = (e) => {
         e.persist();
         setstate(prevstate => ({...prevstate, [e.target.name]: e.target.value}));
     }
 
-    const SubmitRecipeHandler = (e) => {
+    const SubmitRecipeHandler = async (e) => {
         e.preventDefault();
 
-        setstate(prevstate => ({...prevstate, date: new Date()}));
 
-        console.log(state);
+        if(state.chef.trim() === '' || state.dish.trim() === ''){
+            return alert('Input fields must not empty');
+        }
+
+
+
+        const { date, id, dish, chef, ingredients, description, image } = await state;
+        
+        if(props.match.url === '/addrecipe') {
+            const Recipe = await { dish, chef, description, image }
+            Recipe.id = await v4();
+            Recipe.date = await moment().format('LLLL');
+            Recipe.ingredientsArray = await ingredients.split(',');
+            await props.CreateRecipe(Recipe);
+            props.history.push('/');
+        } else {
+            const Recipe = await { date, id, dish, chef, description, image }
+            Recipe.ingredientsArray = await ingredients.split(',');
+            await props.ModifyRecipe(Recipe); 
+            props.history.goBack();
+        }    
     }
 
     return (
@@ -114,4 +156,15 @@ function AddRecipe(props) {
     )
 }
 
-export default AddRecipe;
+const mapStateToProps = state => {
+    return {
+        activerecipe: state.RecipeReducer.activerecipe
+    }
+}
+
+const mapDispatchToProps = ({
+    CreateRecipe,
+    ModifyRecipe
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddRecipe);

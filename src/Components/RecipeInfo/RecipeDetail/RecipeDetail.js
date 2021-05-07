@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { connect } from 'react-redux';
 
+import { DeleteRecipe } from '../../../Store/Actions';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {Paper, CardContent, Typography, Button } from '@material-ui/core';
@@ -44,6 +45,7 @@ function RecipeDetail(props) {
   const classes = useStyles();
 
   const [state, setstate] = useState({
+    id: '',
     date : '', 
     dish: '', 
     chef : '', 
@@ -63,6 +65,11 @@ function RecipeDetail(props) {
         setstate({...props.activerecipe});
       }
   }, [props])
+
+  const DeleteRecipeHandler = async () => {
+      await props.DeleteRecipe(state.id);
+      props.history.push('/');
+  }
     
     return (
         <CardContent className={classes.content}>
@@ -87,7 +94,9 @@ function RecipeDetail(props) {
         variant="contained" color="primary">      
     Edit
     </Button>
-    <Button variant="contained" color="secondary">Delete</Button>
+    <Button
+      onClick={DeleteRecipeHandler} 
+      variant="contained" color="secondary">Delete</Button>
     <Button 
       onClick={ () => props.history.goBack()}
       variant="contained">Back</Button>
@@ -102,4 +111,8 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(RecipeDetail);
+const mapDispatchToProps = ({
+  DeleteRecipe
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeDetail);

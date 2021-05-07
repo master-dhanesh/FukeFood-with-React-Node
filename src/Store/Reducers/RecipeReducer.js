@@ -1,4 +1,4 @@
-import { ACTIVE_RECIPE, REMOVE_ACTIVE_RECIPE } from '../ActionTypes';
+import { ACTIVE_RECIPE, CREATE_RECIPE, MODIFY_RECIPE, REMOVE_ACTIVE_RECIPE, REMOVE_RECIPE } from '../ActionTypes';
 
 const initialState = {
     recipies: [
@@ -19,6 +19,28 @@ const RecipeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 activerecipe: null
+            }
+        case CREATE_RECIPE:
+            const createRecipiesDuplicate = [...state.recipies];
+            createRecipiesDuplicate.push(action.payload);
+            return {
+                ...state,
+                recipies: createRecipiesDuplicate
+            }
+        case MODIFY_RECIPE:
+            const modifyRecipiesDuplicate = [...state.recipies];
+            const mrecipeindex = modifyRecipiesDuplicate.findIndex(r => r.id === action.payload.id);
+            modifyRecipiesDuplicate[mrecipeindex] = action.payload;
+            return {
+                ...state,
+                recipies: modifyRecipiesDuplicate
+            }
+        case REMOVE_RECIPE:
+            const RemoveRecipiesDuplicate = [...state.recipies];
+            const FilterRecipiesDuplicate = RemoveRecipiesDuplicate.filter(r => r.id !== action.payload);
+            return {
+                ...state,
+                recipies: FilterRecipiesDuplicate
             }
         default:
             return state;

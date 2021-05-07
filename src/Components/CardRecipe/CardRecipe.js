@@ -13,7 +13,7 @@ function CardRecipe(props) {
   let recipelist = <img src={loader} alt={loader} />;;
   if(state){
     recipelist = state.recipies.map(r => 
-    <SingleRecipe key={r.date} recipe={r} /> 
+    <SingleRecipe key={r.id} recipe={r} /> 
     )
   }
 
