@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { v4 } from 'uuid';
-import moment from 'moment';
+// import { v4 } from 'uuid';
+// import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { CreateRecipe, ModifyRecipe } from '../../Store/Actions';
@@ -49,7 +49,7 @@ function AddRecipe(props) {
                     })
             }
         }
-    }, [props.activerecipe])
+    }, [props.activerecipe, props.match.url])
 
 
     const ChangeHandler = (e) => {
@@ -67,18 +67,21 @@ function AddRecipe(props) {
 
 
 
-        const { date, id, dish, chef, ingredients, description, image } = await state;
+        const { dish, chef, ingredients, description, image } = await state;
         
         if(props.match.url === '/addrecipe') {
             const Recipe = await { dish, chef, description, image }
-            Recipe.id = await v4();
-            Recipe.date = await moment().format('LLLL');
+            // Recipe.id = await v4();
+            // Recipe.date = await moment().format('LLLL');
             Recipe.ingredientsArray = await ingredients.split(',');
             await props.CreateRecipe(Recipe);
             props.history.push('/');
         } else {
-            const Recipe = await { date, id, dish, chef, description, image }
+            const Recipe = await { ...state }
             Recipe.ingredientsArray = await ingredients.split(',');
+            await delete Recipe.id;
+            await delete Recipe.date;
+            await delete Recipe.ingredients;
             await props.ModifyRecipe(Recipe); 
             props.history.goBack();
         }    

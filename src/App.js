@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { connect } from 'react-redux';
+import { GetRecipies } from './Store/Actions'
+
 import { withRouter } from 'react-router';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
@@ -12,6 +15,13 @@ import RecipeInfo from './Components/RecipeInfo/RecipeInfo';
 import Header from './Components/Header/Header';
 
 class App extends Component {
+
+
+  componentDidMount() {
+    this.props.GetRecipies();
+  }
+
+
   render() {
 
     let isGrid = 'row';
@@ -48,4 +58,8 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapDispatchToProps = ({
+  GetRecipies
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(App));

@@ -34,7 +34,9 @@ function RecipeInfo(props) {
   
   useEffect(() => {
       if(props.activerecipe === null){
-        props.GetActiveRecipie(props.match.params.id)
+        setTimeout(() => {
+          props.GetActiveRecipie(props.match.params.id)
+        }, 1000);
       } else {
         setstate({...props.activerecipe});
       }

@@ -1,4 +1,11 @@
-import { ACTIVE_RECIPE, CREATE_RECIPE, MODIFY_RECIPE, REMOVE_ACTIVE_RECIPE, REMOVE_RECIPE } from '../ActionTypes';
+import { 
+    ACTIVE_RECIPE, 
+    // CREATE_RECIPE, 
+    // MODIFY_RECIPE, 
+    REMOVE_ACTIVE_RECIPE, 
+    // REMOVE_RECIPE,
+    GET_RECIPIES
+ } from '../ActionTypes';
 
 const initialState = {
     recipies: [
@@ -10,6 +17,23 @@ const initialState = {
 
 const RecipeReducer = (state = initialState, action) => {
     switch (action.type) {
+        case GET_RECIPIES:
+            const ApiRecipies = action.payload.map(r => {
+                return {
+                    ...r,
+                    id: r._id, 
+                    date: String(r.createdAt),
+                    dish: r.dish,
+                    chef: r.chef,
+                    ingredientsArray: r.ingredientsArray,
+                    description: r.description, 
+                    image: r.image
+                }
+            })
+            return {
+                ...state,
+                recipies:ApiRecipies
+            }
         case ACTIVE_RECIPE:
             return {
                 ...state,
@@ -20,28 +44,28 @@ const RecipeReducer = (state = initialState, action) => {
                 ...state,
                 activerecipe: null
             }
-        case CREATE_RECIPE:
-            const createRecipiesDuplicate = [...state.recipies];
-            createRecipiesDuplicate.push(action.payload);
-            return {
-                ...state,
-                recipies: createRecipiesDuplicate
-            }
-        case MODIFY_RECIPE:
-            const modifyRecipiesDuplicate = [...state.recipies];
-            const mrecipeindex = modifyRecipiesDuplicate.findIndex(r => r.id === action.payload.id);
-            modifyRecipiesDuplicate[mrecipeindex] = action.payload;
-            return {
-                ...state,
-                recipies: modifyRecipiesDuplicate
-            }
-        case REMOVE_RECIPE:
-            const RemoveRecipiesDuplicate = [...state.recipies];
-            const FilterRecipiesDuplicate = RemoveRecipiesDuplicate.filter(r => r.id !== action.payload);
-            return {
-                ...state,
-                recipies: FilterRecipiesDuplicate
-            }
+        // case CREATE_RECIPE:
+        //     const createRecipiesDuplicate = [...state.recipies];
+        //     createRecipiesDuplicate.push(action.payload);
+        //     return {
+        //         ...state,
+        //         recipies: createRecipiesDuplicate
+        //     }
+        // case MODIFY_RECIPE:
+        //     const modifyRecipiesDuplicate = [...state.recipies];
+        //     const mrecipeindex = modifyRecipiesDuplicate.findIndex(r => r.id === action.payload.id);
+        //     modifyRecipiesDuplicate[mrecipeindex] = action.payload;
+        //     return {
+        //         ...state,
+        //         recipies: modifyRecipiesDuplicate
+        //     }
+        // case REMOVE_RECIPE:
+        //     const RemoveRecipiesDuplicate = [...state.recipies];
+        //     const FilterRecipiesDuplicate = RemoveRecipiesDuplicate.filter(r => r.id !== action.payload);
+        //     return {
+        //         ...state,
+        //         recipies: FilterRecipiesDuplicate
+        //     }
         default:
             return state;
     }

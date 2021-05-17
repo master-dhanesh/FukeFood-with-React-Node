@@ -3,5 +3,6 @@ export {
   RemoveActiveRecipie,
   CreateRecipe,
   ModifyRecipe,
-  DeleteRecipe
+  DeleteRecipe,
+  GetRecipies
 } from "./RecipieActions";
